@@ -34,6 +34,20 @@ I will eventually add some examples.
     }
 </pre>
     
-3. I extended Request to check for an AMF request.
+3. Also you can use the setCall method, i.e.
+
+<pre>
+    class Controller_Gateway extends Controller_Amf {
+
+        public function action_index()
+        {
+            $this->server->setClass("MyClass");
+            $this->server->setClass("Controller_MyClass");
+        }
+    }
+</pre>
+
+4. I extended Request to check for an AMF request.
 
         Request::is_amf()
+
