@@ -1,4 +1,4 @@
-# ZendAMF Module for Kohana 3.0
+# ZendAMF Module for Kohana 3.1
 
 Simple port to work with KO3. Includes the minimal required Zend Framework. The only modified file is Zend/Amf/Server.php to use Kohana::auto_load instead of the ZendPluginLoader.
 
@@ -8,15 +8,18 @@ I will eventually add some examples.
 
 1. If you are going to use a Controller class for the amf services, you will need to modify the constructor:
 <pre>    
-    public function __construct(Request $req = null)
+    public function __construct(Request $req = null, Response $res = null)
     {
         if ( ! isset($req)) 
             $req = Request::instance();
-        parent::__construct($req);
+        if ( ! isset($res)) 
+            $res = Response::instance();
+        parent::__construct($req,$res);
     }
 </pre>
         There is something in the Zend framework that doesn’t load controller classes properly in KO3, 
         and I didn’t want to muddle with the Zend code, so this was an easy workaround.
+        The controller load isn't working in Kohana 3.1.x.
 
 2. I made the AMF endpoint controller so that you can easily extend it to add your own setClassMap() in the action_index() function, i.e.
 
