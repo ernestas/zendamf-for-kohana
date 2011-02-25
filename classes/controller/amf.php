@@ -1,7 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
-ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.MODPATH.'zendamf-for-kohana/vendor/');
-require 'Zend/Amf/Server.php';
+/**
+ * Load Zend Amf Server class if isn't loaded yet...
+ */
+if( ! class_exists("Zend_Amf_Server") )
+{
+	ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.MODPATH.'zendamf-for-kohana/vendor/');
+	require 'Zend/Amf/Server.php';
+}
 
 class Controller_Amf extends Controller {
  
