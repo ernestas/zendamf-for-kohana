@@ -30,7 +30,7 @@ class Controller_Amf extends Controller {
         
         // fixes bug with content-type headers
         if (Request::is_amf())
-            $this->request->response = $handle;
+            $this->response->body( $handle );
         else
             echo $handle;
     }
