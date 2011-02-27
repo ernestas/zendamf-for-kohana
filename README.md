@@ -54,3 +54,4 @@ I will eventually add some examples.
 
         Request::is_amf()
 
+5. For more information about Zend Amf Server please visit: http://framework.zend.com/manual/en/zend.amf.server.html
