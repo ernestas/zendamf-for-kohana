@@ -1,16 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/**
- * Load Zend Amf Server class if isn't loaded yet...
- */
-if( ! class_exists("Zend_Amf_Server") )
-{
-	ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.MODPATH.'zendamf-for-kohana/vendor/');
-	require 'Zend/Amf/Server.php';
-}
 
 class Controller_Amf extends Controller {
  
+	// Server instance
 	public $server;
+	
+	// Load the config options
+	private $config;
 
 	//TODO: Fix the constructor to don't crash in inside requests
 
@@ -18,20 +14,23 @@ class Controller_Amf extends Controller {
 	{
 		parent::before();
         
+		// Load config file
+		$this->config = Kohana::config('zendamf-for-kohana');
+		
+		// Load Zend Amf Server class
+		$this->_vendorClassLoader();
+
+		// Instance Zend Amf Server object
 		$this->server = new Zend_Amf_Server();
-		$this->server->setProduction(TRUE);
+		$this->server->setProduction($this->config->production);
+		
+		if($this->config->amfbrowser)
+			$this->_enableZamfBrowser();
 	}
     
 	public function action_index()
 	{
-	        // Can override to add custom setClass(), this is for tests porpouses
-
-		//This is only for tests, in the real world enable the proction mode and don't give ZamfBrowser support.
-		$this->server->setProduction(FALSE);
-
-		$this->server->setClass( "ZendAmfServiceBrowser" );
-	        // Set a reference to the Zend_Amf_Server object so ZendAmfServiceBrowser class can retrive method information.
-        	ZendAmfServiceBrowser::$ZEND_AMF_SERVER = $this->server; 
+		// Can override to add custom setClass(), this is for tests porpouses
 	}
     
 	public function after()
@@ -46,4 +45,26 @@ class Controller_Amf extends Controller {
 	        else
 	        	echo $handle;
 	}
+	
+	/**
+	 * Load the Zend AMF from Vendor keep the existing one loaded
+	 */
+	private function _vendorClassLoader() {
+		if( ! class_exists("Zend_Amf_Server") )
+		{
+			ini_set('include_path',PATH_SEPARATOR.MODPATH.'zendamf-for-kohana/vendor/');
+			require 'Zend/Amf/Server.php';
+		}
+	}
+	
+	/**
+	 * Enable the ZamfBrowser when called
+	 */
+	private function _enableZamfBrowser()
+	{
+		$this->server->setClass( "ZendAmfServiceBrowser" );
+        // Set a reference to the Zend_Amf_Server object so ZendAmfServiceBrowser class can retrive method information.
+		ZendAmfServiceBrowser::$ZEND_AMF_SERVER = $this->server;
+	}
+	
 }
