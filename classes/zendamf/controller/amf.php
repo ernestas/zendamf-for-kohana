@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Kohana_Controller_Amf extends Controller {
+class Zendamf_Controller_Amf extends Kohana_Controller {
  
 	// Server instance
 	public $server;
@@ -47,13 +47,14 @@ class Kohana_Controller_Amf extends Controller {
 	 */
 	private function _enableZamfBrowser()
 	{
+		$this->_loadZamfBrowser();
 		$this->server->setClass( "ZendAmfServiceBrowser" );
         // Set a reference to the Zend_Amf_Server object so ZendAmfServiceBrowser class can retrive method information.
 		ZendAmfServiceBrowser::$ZEND_AMF_SERVER = $this->server;
 	}
 	
 	/**
-	* Load Zend classes.
+	* Load Zend classes
 	*/
 	private function _loadZendAmfServer()
 	{
@@ -63,6 +64,18 @@ class Kohana_Controller_Amf extends Controller {
 			require_once 'Zend/Loader/Autoloader.php';
 			require_once 'Zend/Amf/Server.php';
 			Zend_Loader_Autoloader::getInstance();
+		}
+	}
+	
+	/**
+	* Load ZamfBrowser
+	*/
+	private function _loadZamfBrowser()
+	{
+		if ( $path = Kohana::find_file('vendor', 'ZamfBrowser/browser/ZendAmfServiceBrowser') )
+		{
+			ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.dirname($path));
+			require_once 'ZendAmfServiceBrowser.php';
 		}
 	}
 	
