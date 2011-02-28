@@ -7,17 +7,8 @@ If you expecting errors in the Zend_Amf_Server, make sure that your instanced Ze
 
 ## Notes
 
-1. If you are going to use a Controller class for the amf services, you will need to modify the constructor:
-  
-        public function __construct(Request $request = null, Response $response = null)
-        {
-            if( ! isset( $request ) )
-                $request = Request::current();
-            if( ! isset( $response ) )
-                $response = Response::factory();
+1. The Controller class is extended to work the amf services, you can override it or disable in the config file.
 
-            parent::__construct($request, $response);
-        }
     There is something in the Zend framework that doesn’t load controller classes properly in KO3, 
     and I didn’t want to muddle with the Zend code, so this was an easy workaround.
 
@@ -35,9 +26,9 @@ If you expecting errors in the Zend_Amf_Server, make sure that your instanced Ze
             }
         }
     
-3. Also you can use the setCall method, i.e.
+3. Also you can use the setClass method, i.e.
 
-        class Controller_Gateway extends Controller_Amf 
+        class Controller_Amf extends Zendamf_Controller_Amf
         {
             public function action_index()
             {
@@ -50,4 +41,4 @@ If you expecting errors in the Zend_Amf_Server, make sure that your instanced Ze
 
         Request::is_amf()
 
-5. For more information about Zend Amf Server please visit: http://framework.zend.com/manual/en/zend.amf.server.html
+5. Visit Zend Amf Server [reference guide](http://framework.zend.com/manual/en/zend.amf.server.html) for more info.
