@@ -5,53 +5,46 @@ Simple port to work with KO3. Includes the minimal required Zend Framework. The 
 The module will use the first instance of Zend_Amf_Server loaded in your application. So if you already using the Zend Framework with Kohana it will use your version of the class.
 If you expecting errors in the Zend_Amf_Server, make sure that your instanced ZendFramework is the same version from the bult-in module.
 
-I will eventually add some examples.
-
 ## Notes
 
 1. If you are going to use a Controller class for the amf services, you will need to modify the constructor:
-<pre>    
-    public function __construct(Request $req = null, Response $res = null)
-    {
-        if ( ! isset($req)) 
-            $req = Request::instance();
-        if ( ! isset($res)) 
-            $res = Response::instance();
-        parent::__construct($req,$res);
-    }
-</pre>
-        There is something in the Zend framework that doesn’t load controller classes properly in KO3, 
-        and I didn’t want to muddle with the Zend code, so this was an easy workaround.
-        The controller load isn't working in Kohana 3.1.x.
+  
+        public function __construct(Request $request = null, Response $response = null)
+        {
+            if( ! isset( $request ) )
+                $request = Request::current();
+            if( ! isset( $response ) )
+                $response = Response::factory();
+
+            parent::__construct($request, $response);
+        }
+    There is something in the Zend framework that doesn’t load controller classes properly in KO3, 
+    and I didn’t want to muddle with the Zend code, so this was an easy workaround.
 
 2. I made the AMF endpoint controller so that you can easily extend it to add your own setClassMap() in the action_index() function, i.e.
 
-<pre>
-    class Controller_Gateway extends Controller_Amf {
-    
-        public function action_index()
+        class Controller_Gateway extends Controller_Amf 
         {
-            $this->server->setClassMap
-            (
-                '{actionscript package name}', 
-                '{php class name}'
-            );
+            public function action_index()
+            {
+                $this->server->setClassMap
+                (
+                    '{actionscript package name}', 
+                    '{php class name}'
+                );
+            }
         }
-    }
-</pre>
     
 3. Also you can use the setCall method, i.e.
 
-<pre>
-    class Controller_Gateway extends Controller_Amf {
-
-        public function action_index()
+        class Controller_Gateway extends Controller_Amf 
         {
-            $this->server->setClass("MyClass");
-            $this->server->setClass("Controller_MyClass");
+            public function action_index()
+            {
+                $this->server->setClass("MyClass");
+                $this->server->setClass("Controller_MyClass");
+            }
         }
-    }
-</pre>
 
 4. I extended Request to check for an AMF request.
 
