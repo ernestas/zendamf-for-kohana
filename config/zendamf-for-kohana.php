@@ -7,4 +7,7 @@ return array
 	
 	// Enable ZamfBrowser as default
 	'amfbrowser' => TRUE,
+	
+	// Enable Controller fix
+	'controller' => TRUE,
 );

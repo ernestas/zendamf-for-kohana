@@ -8,11 +8,13 @@ class Controller extends Kohana_Controller {
      */
 	public function __construct(Request $request = null, Response $response = null)
 	{
-		if( ! isset( $request ) )
-			$request = Request::current();
-		if( ! isset( $response ) )
-			$response = Response::factory();
-
+		if( Kohana::config('zendamf-for-kohana.controller') ) 
+		{
+			if( ! isset( $request ) )
+				$request = Request::current();
+			if( ! isset( $response ) )
+				$response = Response::factory();
+		}
 		parent::__construct($request, $response);
 	}
 }
