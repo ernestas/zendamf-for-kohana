@@ -8,7 +8,7 @@ class Zendamf_Controller extends Kohana_Controller {
      */
 	public function __construct(Request $request = null, Response $response = null)
 	{
-		if( Kohana::config('zendamf-for-kohana.controller') ) 
+		if( Kohana::$config->load('zendamf-for-kohana.controller') ) 
 		{
 			if( ! isset( $request ) )
 				$request = Request::current();

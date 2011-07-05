@@ -13,7 +13,7 @@ class Zendamf_Controller_Amf extends Kohana_Controller {
 		parent::before();
         
 		// Load config file
-		$this->config = Kohana::config('zendamf-for-kohana');
+		$this->config = Kohana::$config->load('zendamf-for-kohana');
 		if( ! class_exists( "Zend_Amf_Server" ) )
 			$this->_loadZendAmfServer();
 		
