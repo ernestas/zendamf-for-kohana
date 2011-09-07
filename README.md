@@ -1,4 +1,4 @@
-# ZendAMF Module for Kohana 3.1
+# ZendAMF Module for Kohana 3.2
 
 Simple port to work with KO3. Includes the minimal required Zend Framework. The only modified file is Zend/Amf/Server.php to use Kohana::auto_load instead of the ZendPluginLoader.
 
