@@ -14,15 +14,19 @@ class Zendamf_Controller_Amf extends Kohana_Controller {
         
 		// Load config file
 		$this->config = Kohana::$config->load('zendamf-for-kohana');
-		if( ! class_exists( "Zend_Amf_Server" ) )
-			$this->_loadZendAmfServer();
+		if ( ! class_exists("Zend_Amf_Server"))
+		{
+			$this->_load_zend_amf_server();
+		}
 		
 		// Instance Zend Amf Server object
-		$this->server = new Zend_Amf_Server();
+		$this->server = new Zend_Amf_Server;
 		$this->server->setProduction($this->config->production);
 		
-		if($this->config->amfbrowser)
-			$this->_enableZamfBrowser();
+		if ($this->config->amfbrowser)
+		{
+			$this->_enable_zamf_browser();
+		}
 	}
     
 	public function action_index()
@@ -45,20 +49,21 @@ class Zendamf_Controller_Amf extends Kohana_Controller {
 	/**
 	 * Enable the ZamfBrowser when called
 	 */
-	private function _enableZamfBrowser()
+	private function _enable_zamf_browser()
 	{
-		$this->_loadZamfBrowser();
-		$this->server->setClass( "ZendAmfServiceBrowser" );
-        // Set a reference to the Zend_Amf_Server object so ZendAmfServiceBrowser class can retrive method information.
+		$this->_load_zamf_browser();
+		$this->server->setClass("ZendAmfServiceBrowser");
+		// Set a reference to the Zend_Amf_Server object
+		// so ZendAmfServiceBrowser class can retrive method information.
 		ZendAmfServiceBrowser::$ZEND_AMF_SERVER = $this->server;
 	}
 	
 	/**
-	* Load Zend classes
-	*/
-	private function _loadZendAmfServer()
+	 * Load Zend classes
+	 */
+	private function _load_zend_amf_server()
 	{
-		if ( $path = Kohana::find_file('vendor', 'Zend/Loader') )
+		if ($path = Kohana::find_file('vendor', 'Zend/Loader'))
 		{
 			ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.dirname(dirname($path)));
 			require_once 'Zend/Loader/Autoloader.php';
@@ -68,15 +73,14 @@ class Zendamf_Controller_Amf extends Kohana_Controller {
 	}
 	
 	/**
-	* Load ZamfBrowser
-	*/
-	private function _loadZamfBrowser()
+	 * Load ZamfBrowser
+	 */
+	private function _load_zamf_browser()
 	{
-		if ( $path = Kohana::find_file('vendor', 'ZamfBrowser/browser/ZendAmfServiceBrowser') )
+		if ($path = Kohana::find_file('vendor', 'ZamfBrowser/browser/ZendAmfServiceBrowser'))
 		{
 			ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.dirname($path));
 			require_once 'ZendAmfServiceBrowser.php';
 		}
 	}
-	
 }
